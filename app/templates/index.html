@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ping Response Times</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 0, 255, 0.1);
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #930077;
+        }
+
+        table {
+            border-spacing: 0;
+            margin: 20px auto;
+            border-collapse: separate;
+            border: 1px solid #930077;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+        
+        }
+        
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #930077;
+        }
+
+        th {
+            background-color: #930077;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        .highlight {
+            background-color: rgb(255, 0, 255, 0.2);
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .delete-button, .home-button {
+            background-color: #930077;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+        }
+        
+        .delete-button:hover, .home-button:hover {
+            background-color: #f8c4dd;
+            cursor: pointer;
+        }
+
+        .tables-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 960px; /* adjust this value as needed */
+            margin: 0 auto; /* center the container horizontally */
+        }
+
+        .zone1a-table, .helsinki-table {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ping Response Times</h1>
+    <table>
+        <tr>
+            <th>Region</th>
+            <th>Average of Averages (ms) t3.medium instances</th>
+        </tr>
+        {% for avg_response in avg_response_times %}
+            <tr>
+                <td>{{ avg_response.region }}</td>
+                <td class="highlight">{{ avg_response.avg_response_time }} ms</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div class="buttons">
+        <form action="/delete" method="get">
+            <button class="delete-button" type="submit">Clear Responses</button>
+        </form>
+        <form action="/" method="get">
+            <button class="home-button" type="submit">Ping again</button>
+        </form>
+    </div>
+    <div class="tables-container">
+        <table class="zone1a-table">
+            <tr>
+                
+                <th> {{ AZ1Name }} / <br> Response Time Avg (ms)</th>
+                <th>Measured at</th>
+            </tr>
+            {% for response in response_times %}
+                {% if response.region ==  AZ1Name  %}
+                    <tr>
+                        
+                        <td class="highlight">{{ response.response_time }} ms</td>
+                        <td>{{ response.timestamp }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <table class="helsinki-table">
+            <tr>
+                
+                <th> {{ AZ2Name }} / <br> Response Time Avg (ms)</th>
+                <th>Measured at</th>
+            </tr>
+            {% for response in response_times %}
+                {% if response.region ==  AZ2Name  %}
+                    <tr>
+                        
+                        <td class="highlight">{{ response.response_time }} ms</td>
+                        <td>{{ response.timestamp }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
